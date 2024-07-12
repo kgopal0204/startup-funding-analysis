@@ -17,6 +17,32 @@ option = st.sidebar.selectbox("Select One", ["Overall Analysis", "Startup", "Inv
 
 
 # Overall Analysis Function
+def load_overall_analysis():
+    col1, col2 = st.columns(2)
+    with col1:
+        # Total Invested Amount in StartUps
+        total = df["amount"].sum()
+        st.metric("Total Amount Invested in StartUps", "₹ " + str(total) + " Cr")
+
+    with col2:
+        # Average Amount Invested In a StartUp
+        avg_amount = round(df.groupby("startup")["amount"].sum().mean(), 2)
+        st.metric("Average Amount Invested in  StartUps", "₹ " + str(avg_amount) + " Cr")
+
+    col3, col4 = st.columns(2)
+    with col3:
+        # Total Funded StartUps
+        num_startups = df["startup"].nunique()
+        st.metric("Total Funded StartUps", num_startups)
+
+    with col4:
+        # Maximum Invested Amount in a StartUp
+        max_funding = df.groupby("startup")["amount"].sum().sort_values(ascending=False).head(1)
+        st.metric("Maximum Amount Invested by Investors in a StartUp",
+                  f"{max_funding.index[0]} : " + "₹ " + str(max_funding.values[0]) + " Cr")
+
+    # Month on Month Analysis
+    st.title("Month on Month Analysis")
 
 
 # investor function
